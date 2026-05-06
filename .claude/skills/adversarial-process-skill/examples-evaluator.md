@@ -25,7 +25,7 @@ async def run_evaluator(
         system_prompt=build_evaluator_prompt(contract, evaluation_mode),
         permission_mode="bypassPermissions",
         tools=["Read", "Bash", "Glob", "Grep"],
-        model=config.model,
+        model=config.evaluator_model,
         max_turns=20,
     )
     raw = ""

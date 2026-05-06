@@ -23,7 +23,7 @@ async def run_generator(
         system_prompt=build_generator_prompt(contract, previous_feedback),
         permission_mode="bypassPermissions",
         tools=["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
-        model=config.model,
+        model=config.generator_model,
         max_turns=40,
         persist_session=True,
         session_id=session_id,  # resumes prior session on retries
@@ -50,7 +50,7 @@ async def run_generator_plan_only(
         system_prompt=build_generator_prompt(contract, previous_plan_feedback),
         permission_mode="bypassPermissions",
         tools=["Read", "Glob", "Grep"],  # read-only — no code writing
-        model=config.model,
+        model=config.generator_model,
         max_turns=20,
         # persist_session not set — plan proposals are stateless
     )

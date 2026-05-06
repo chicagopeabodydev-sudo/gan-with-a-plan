@@ -34,7 +34,9 @@ Note: only the Generator uses `persist_session: true` — it must maintain sessi
 | `max_retries_per_sprint` | int | Max Generator→Evaluator cycles before sprint fails |
 | `max_sprints` | int | Max sprint contracts to attempt |
 | `work_dir` | string | Filesystem path where the Harness initializes the workspace |
-| `model` | string | Claude model ID used by all agents |
+| `planner_model` | string | Model for Planner agent. Env: `PLANNER_MODEL` (default: `claude-sonnet-4-6`) |
+| `generator_model` | string | Model for Generator agent. Env: `GENERATOR_MODEL` (default: `claude-sonnet-4-6`) |
+| `evaluator_model` | string | Model for Evaluator agent. Env: `EVALUATOR_MODEL` (default: `claude-opus-4-7`) |
 
 ## Steps with NO Planning Loop
 

@@ -3,6 +3,7 @@
 ## Type Definitions (types.py)
 
 ```python
+import os
 from dataclasses import dataclass, field
 from typing import TypedDict
 
@@ -33,7 +34,9 @@ class HarnessConfig:
     max_sprints: int = 3
     max_retries_per_sprint: int = 3
     pass_threshold: float = 8.0
-    model: str = "claude-sonnet-4-6"
+    planner_model: str = field(default_factory=lambda: os.environ.get("PLANNER_MODEL", "claude-sonnet-4-6"))
+    generator_model: str = field(default_factory=lambda: os.environ.get("GENERATOR_MODEL", "claude-sonnet-4-6"))
+    evaluator_model: str = field(default_factory=lambda: os.environ.get("EVALUATOR_MODEL", "claude-opus-4-7"))
 
 @dataclass
 class SprintResult:
@@ -49,6 +52,7 @@ class HarnessResult:
     total_duration_ms: float = 0.0
 ```
 
+- Each model field reads its env var at instantiation time via `field(default_factory=...)`. Set `PLANNER_MODEL`, `GENERATOR_MODEL`, or `EVALUATOR_MODEL` to override without changing code. The Evaluator defaults to `claude-opus-4-7` while the Generator defaults to `claude-sonnet-4-6` — ensuring the judge is a different (more capable) model than the builder by default.
 - `CriterionFeedback`, `EvalResult`, `SprintContract` use `TypedDict` — they are parsed directly from `json.loads()` output.
 - `HarnessConfig`, `SprintResult`, `HarnessResult` use `@dataclass` — they are constructed by application code.
 - `SprintResult.eval_result` is `None` when a sprint fails due to exhausted retries before any evaluation completes.

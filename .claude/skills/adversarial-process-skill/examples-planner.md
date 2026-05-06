@@ -18,7 +18,7 @@ async def run_planner(config: HarnessConfig) -> str:
         system_prompt=PLANNER_SYSTEM_PROMPT,
         permission_mode="bypassPermissions",
         tools=["Read", "Write"],
-        model=config.model,
+        model=config.planner_model,
         max_turns=20,
     )
     full_response = ""

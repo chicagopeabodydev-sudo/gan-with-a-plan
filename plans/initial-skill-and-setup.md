@@ -58,7 +58,9 @@ Note: only the Generator uses `persistSession: true` — it must maintain sessio
 | `maxRetriesPerSprint` | int | Max Generator→Evaluator cycles before sprint fails |
 | `maxSprints` | int | Max sprint contracts to attempt |
 | `workDir` | string | Filesystem path where the Harness initializes the workspace |
-| `model` | string | Claude model ID used by all agents |
+| `planner_model` | string | Model for Planner agent. Env: `PLANNER_MODEL` (default: `claude-sonnet-4-6`) |
+| `generator_model` | string | Model for Generator agent. Env: `GENERATOR_MODEL` (default: `claude-sonnet-4-6`) |
+| `evaluator_model` | string | Model for Evaluator agent. Env: `EVALUATOR_MODEL` (default: `claude-opus-4-7`) |
 
 **## Steps with NO Planning Loop** (numbered, bold sub-headings per skill-reviewer style)
 
@@ -141,7 +143,9 @@ class HarnessConfig:
     max_sprints: int = 3
     max_retries_per_sprint: int = 3
     pass_threshold: float = 8.0
-    model: str = "claude-opus-4-5"
+    planner_model: str = field(default_factory=lambda: os.environ.get("PLANNER_MODEL", "claude-sonnet-4-6"))
+    generator_model: str = field(default_factory=lambda: os.environ.get("GENERATOR_MODEL", "claude-sonnet-4-6"))
+    evaluator_model: str = field(default_factory=lambda: os.environ.get("EVALUATOR_MODEL", "claude-opus-4-7"))
 
 @dataclass
 class SprintResult:
@@ -169,7 +173,7 @@ async def run_planner(config: HarnessConfig) -> str:
         system_prompt=PLANNER_SYSTEM_PROMPT,
         permission_mode="bypassPermissions",
         tools=["Read", "Write"],
-        model=config.model,
+        model=config.planner_model,
         max_turns=20,
     )
     full_response = ""
@@ -199,7 +203,7 @@ async def run_generator(
         system_prompt=build_generator_prompt(contract, previous_feedback),
         permission_mode="bypassPermissions",
         tools=["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
-        model=config.model,
+        model=config.generator_model,
         max_turns=40,
         persist_session=True,
         session_id=session_id,      # resume prior session on retries
@@ -237,7 +241,7 @@ async def run_evaluator(
         system_prompt=build_evaluator_prompt(contract, evaluation_mode),
         permission_mode="bypassPermissions",
         tools=["Read", "Bash", "Glob", "Grep"],
-        model=config.model,
+        model=config.evaluator_model,
         max_turns=20,
     )
     raw = ""
@@ -336,7 +340,7 @@ Key note: Python's `for/else` idiom — the `else` clause runs only when the loo
 ### main.py / Entry Point
 
 ```python
-import asyncio, argparse
+import asyncio, argparse, os
 from .types import HarnessConfig
 from .harness import run_harness
 
@@ -349,6 +353,12 @@ def main():
     parser.add_argument("--max-sprints", type=int, default=3)
     parser.add_argument("--max-retries", type=int, default=3)
     parser.add_argument("--pass-threshold", type=float, default=8.0)
+    parser.add_argument("--planner-model",
+        default=os.environ.get("PLANNER_MODEL", "claude-sonnet-4-6"))
+    parser.add_argument("--generator-model",
+        default=os.environ.get("GENERATOR_MODEL", "claude-sonnet-4-6"))
+    parser.add_argument("--evaluator-model",
+        default=os.environ.get("EVALUATOR_MODEL", "claude-opus-4-7"))
     args = parser.parse_args()
 
     prompt = args.prompt or open(args.file).read()
@@ -358,6 +368,9 @@ def main():
         max_sprints=args.max_sprints,
         max_retries_per_sprint=args.max_retries,
         pass_threshold=args.pass_threshold,
+        planner_model=args.planner_model,
+        generator_model=args.generator_model,
+        evaluator_model=args.evaluator_model,
     )
     result = asyncio.run(run_harness(config, plan_loop=args.plan_loop))
     for s in result.sprints:
