@@ -2,17 +2,7 @@
 
 ## Context
 
-The `adversarial-process-skill` directory exists but its `SKILL.md` is an empty directory (not a file) and `examples.md` is empty. The project is a GAN-style code generation harness with TypeScript reference implementations for five components: Planner, Generator, Evaluator, Logger, and Harness. This plan defines the content for both files and converts the TypeScript examples to idiomatic Python using `claude_code_sdk`.
-
----
-
-## Prerequisite
-
-`SKILL.md` is currently an empty **directory** at `.claude/skills/adversarial-process-skill/SKILL.md`. It must be removed with `rmdir` before the file can be written.
-
-```
-rmdir /Users/peabody/Documents/repos/gan-with-a-plan/.claude/skills/adversarial-process-skill/SKILL.md
-```
+The `adversarial-process-skill` directory contains a `SKILL.md` with appropriate content for this project. This plan defines the content for the Python example files using `claude_code_sdk`.
 
 ---
 
@@ -387,8 +377,7 @@ if __name__ == "__main__":
 
 | Action | Path |
 |--------|------|
-| Remove (empty dir) | `.claude/skills/adversarial-process-skill/SKILL.md` |
-| Create (new file) | `.claude/skills/adversarial-process-skill/SKILL.md` |
+| Reference (do not modify) | `.claude/skills/adversarial-process-skill/SKILL.md` |
 | Write | `.claude/skills/adversarial-process-skill/examples.md` |
 | Reference (do not modify) | `.claude/skills/project-overview-skill/SKILL.md` |
 | Reference (do not modify) | `.claude/skills/skill-reviewer/SKILL.md` |
