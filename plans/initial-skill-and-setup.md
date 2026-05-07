@@ -25,8 +25,6 @@ Brief prose intro — what the pattern is, when to use it, the two loop variants
 Trigger when a user wants to:
 - Build a self-improving multi-agent code generation pipeline
 - Implement generator-evaluator retry loops (GAN-style)
-- Compare plan-gated vs. direct-build agentic approaches
-- Replace human review with an autonomous evaluator agent
 
 **## Components**
 
@@ -76,11 +74,6 @@ Steps 1–3 same as above, then:
 
 **## Additional Resources**
 
-Link: `[Python code examples](./examples.md)`
-
----
-
-## File 2: `.claude/skills/adversarial-process-skill/examples.md`
 
 ### Document structure
 
