@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gan-with-a-plan"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "claude-code-sdk",
+    "python-dotenv",
+]
+
+[project.scripts]
+gan = "gan_with_a_plan.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gan_with_a_plan"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
