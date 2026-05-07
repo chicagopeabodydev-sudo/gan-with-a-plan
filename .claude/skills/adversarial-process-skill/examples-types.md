@@ -37,6 +37,8 @@ class HarnessConfig:
     planner_model: str = field(default_factory=lambda: os.environ.get("PLANNER_MODEL", "claude-sonnet-4-6"))
     generator_model: str = field(default_factory=lambda: os.environ.get("GENERATOR_MODEL", "claude-sonnet-4-6"))
     evaluator_model: str = field(default_factory=lambda: os.environ.get("EVALUATOR_MODEL", "claude-opus-4-7"))
+    mode: str = field(default_factory=lambda: os.environ.get("GAN_MODE", "implementation"))
+    # "implementation" = no-plan loop; "plan" = plan-gated loop
 
 @dataclass
 class SprintResult:
@@ -53,6 +55,7 @@ class HarnessResult:
 ```
 
 - Each model field reads its env var at instantiation time via `field(default_factory=...)`. Set `PLANNER_MODEL`, `GENERATOR_MODEL`, or `EVALUATOR_MODEL` to override without changing code. The Evaluator defaults to `claude-opus-4-7` while the Generator defaults to `claude-sonnet-4-6` — ensuring the judge is a different (more capable) model than the builder by default.
+- `mode` controls which GAN variant runs: `"implementation"` runs a single Generator→Evaluator loop on the built code; `"plan"` adds a second Generator→Evaluator loop that approves the plan before any code is written. Set via `GAN_MODE` env var or `--mode` CLI arg.
 - `CriterionFeedback`, `EvalResult`, `SprintContract` use `TypedDict` — they are parsed directly from `json.loads()` output.
 - `HarnessConfig`, `SprintResult`, `HarnessResult` use `@dataclass` — they are constructed by application code.
 - `SprintResult.eval_result` is `None` when a sprint fails due to exhausted retries before any evaluation completes.

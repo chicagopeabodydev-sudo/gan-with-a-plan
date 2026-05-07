@@ -117,7 +117,7 @@ async def _run_plan_approval_loop(contract, config: HarnessConfig) -> None:
         previous_plan_feedback = review
     raise RuntimeError("Plan approval loop exhausted retries")
 
-async def run_harness(config: HarnessConfig, plan_loop: bool = False) -> HarnessResult:
+async def run_harness(config: HarnessConfig) -> HarnessResult:
     os.makedirs(config.work_dir, exist_ok=True)
     start = time.time()
 
@@ -127,7 +127,7 @@ async def run_harness(config: HarnessConfig, plan_loop: bool = False) -> Harness
     for sprint_num in range(1, config.max_sprints + 1):
         contract = await _negotiate_contract(config, sprint_num)
 
-        if plan_loop:
+        if config.mode == "plan":
             await _run_plan_approval_loop(contract, config)
 
         session_id, previous_feedback = None, None
@@ -151,7 +151,7 @@ async def run_harness(config: HarnessConfig, plan_loop: bool = False) -> Harness
 - `_run_plan_approval_loop` writes the plan string to `plan.md` before calling the Evaluator, giving the Evaluator's filesystem tools something to read.
 - Python's `for/else` idiom — the `else` clause runs only when the loop exhausted all retries without `break`, cleanly distinguishing pass vs. exhaustion.
 - `session_id` is threaded through retry iterations so the Generator resumes its prior context.
-- `plan_loop=True` inserts `_run_plan_approval_loop` between contract negotiation and implementation — the implementation retry loop is unchanged.
+- `config.mode == "plan"` inserts `_run_plan_approval_loop` between contract negotiation and implementation — the implementation retry loop is unchanged.
 
 ## main.py / Entry Point
 
@@ -164,7 +164,8 @@ def main():
     parser = argparse.ArgumentParser(description="GAN-style adversarial code generation harness")
     parser.add_argument("prompt", nargs="?", help="Task description")
     parser.add_argument("--file", help="Read prompt from file instead of CLI arg")
-    parser.add_argument("--plan-loop", action="store_true", help="Enable plan-gated loop")
+    parser.add_argument("--mode", choices=["implementation", "plan"], default=os.environ.get("GAN_MODE", "implementation"),
+        help="GAN variant: 'implementation' (default) or 'plan' (plan-gated loop)")
     parser.add_argument("--work-dir", default="./workspace", help="Working directory for agents")
     parser.add_argument("--max-sprints", type=int, default=3)
     parser.add_argument("--max-retries", type=int, default=3)
@@ -189,8 +190,9 @@ def main():
         planner_model=args.planner_model,
         generator_model=args.generator_model,
         evaluator_model=args.evaluator_model,
+        mode=args.mode,
     )
-    result = asyncio.run(run_harness(config, plan_loop=args.plan_loop))
+    result = asyncio.run(run_harness(config))
 
     for s in result.sprints:
         status = "PASSED" if s.passed else "FAILED"

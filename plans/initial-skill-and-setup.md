@@ -48,6 +48,7 @@ Note: only the Generator uses `persistSession: true` — it must maintain sessio
 | `maxRetriesPerSprint` | int | Max Generator→Evaluator cycles before sprint fails |
 | `maxSprints` | int | Max sprint contracts to attempt |
 | `workDir` | string | Filesystem path where the Harness initializes the workspace |
+| `mode` | `"implementation"` \| `"plan"` | GAN variant to run. Env: `GAN_MODE` (default: `"implementation"`) |
 | `planner_model` | string | Model for Planner agent. Env: `PLANNER_MODEL` (default: `claude-sonnet-4-6`) |
 | `generator_model` | string | Model for Generator agent. Env: `GENERATOR_MODEL` (default: `claude-sonnet-4-6`) |
 | `evaluator_model` | string | Model for Evaluator agent. Env: `EVALUATOR_MODEL` (default: `claude-opus-4-7`) |
@@ -136,6 +137,8 @@ class HarnessConfig:
     planner_model: str = field(default_factory=lambda: os.environ.get("PLANNER_MODEL", "claude-sonnet-4-6"))
     generator_model: str = field(default_factory=lambda: os.environ.get("GENERATOR_MODEL", "claude-sonnet-4-6"))
     evaluator_model: str = field(default_factory=lambda: os.environ.get("EVALUATOR_MODEL", "claude-opus-4-7"))
+    mode: str = field(default_factory=lambda: os.environ.get("GAN_MODE", "implementation"))
+    # "implementation" = no-plan loop; "plan" = plan-gated loop
 
 @dataclass
 class SprintResult:
@@ -296,7 +299,7 @@ Token counts come from `message.usage.input_tokens` / `message.usage.output_toke
 ### harness.py
 
 ```python
-async def run_harness(config: HarnessConfig, plan_loop: bool = False) -> HarnessResult:
+async def run_harness(config: HarnessConfig) -> HarnessResult:
     os.makedirs(config.work_dir, exist_ok=True)
     start = time.time()
 
@@ -306,7 +309,7 @@ async def run_harness(config: HarnessConfig, plan_loop: bool = False) -> Harness
     for sprint_num in range(1, config.max_sprints + 1):
         contract = await _negotiate_contract(config, sprint_num)
 
-        if plan_loop:
+        if config.mode == "plan":
             await _run_plan_approval_loop(contract, config)
 
         session_id, previous_feedback = None, None
@@ -338,7 +341,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("prompt", nargs="?")
     parser.add_argument("--file")
-    parser.add_argument("--plan-loop", action="store_true")
+    parser.add_argument("--mode", choices=["implementation", "plan"], default=os.environ.get("GAN_MODE", "implementation"),
+        help="GAN variant: 'implementation' (default) or 'plan' (plan-gated loop)")
     parser.add_argument("--work-dir", default="./workspace")
     parser.add_argument("--max-sprints", type=int, default=3)
     parser.add_argument("--max-retries", type=int, default=3)
@@ -361,8 +365,9 @@ def main():
         planner_model=args.planner_model,
         generator_model=args.generator_model,
         evaluator_model=args.evaluator_model,
+        mode=args.mode,
     )
-    result = asyncio.run(run_harness(config, plan_loop=args.plan_loop))
+    result = asyncio.run(run_harness(config))
     for s in result.sprints:
         print(f"Sprint {s.sprint_number}: {'PASSED' if s.passed else 'FAILED'} ({s.retries} retries)")
     print(f"Overall: {'SUCCESS' if result.success else 'FAILED'} in {result.total_duration_ms:.0f}ms")
