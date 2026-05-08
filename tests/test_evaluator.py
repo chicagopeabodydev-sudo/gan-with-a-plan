@@ -28,7 +28,7 @@ async def test_run_evaluator_passes(monkeypatch, fake_sdk_query):
         fake_sdk_query(assistant_text=SAMPLE_EVAL),
     )
 
-    result = await run_evaluator(contract, config)
+    result, _ = await run_evaluator(contract, config)
     assert result["passed"] is True  # score 9.0 >= threshold 8.0
 
 @pytest.mark.asyncio
@@ -42,5 +42,5 @@ async def test_run_evaluator_fails_below_threshold(monkeypatch, fake_sdk_query):
         fake_sdk_query(assistant_text=low_score),
     )
 
-    result = await run_evaluator(contract, config)
+    result, _ = await run_evaluator(contract, config)
     assert result["passed"] is False

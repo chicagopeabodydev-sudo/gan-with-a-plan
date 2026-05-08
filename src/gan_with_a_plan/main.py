@@ -1,4 +1,5 @@
-import asyncio, argparse, os, sys
+import asyncio, argparse, json, os, re, sys
+from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -37,12 +38,39 @@ def main():
         evaluator_model=args.evaluator_model,
         mode=args.mode,
     )
+    run_ts = datetime.now().strftime("%Y-%m-%d_%H%M%S")
     result = asyncio.run(run_harness(config))
 
     for s in result.sprints:
         status = "PASSED" if s.passed else "FAILED"
         print(f"Sprint {s.sprint_number}: {status} ({s.retries} retries)")
     print(f"Overall: {'SUCCESS' if result.success else 'FAILED'} in {result.total_duration_ms:.0f}ms")
+
+    report = result.log_report
+    if report:
+        print(f"\n=== Metrics Report (mode={report.get('mode')}) ===")
+        print(f"Total tokens : {report['total_tokens']:,}  "
+              f"(in={report['total_input_tokens']:,}, out={report['total_output_tokens']:,})")
+        print(f"Total turns  : {report['total_turn_count']}")
+        print(f"Total time   : {report['total_duration_ms']:.0f}ms")
+        print("\nPhase breakdown:")
+        for phase, data in report.get("phases", {}).items():
+            pr = f"  pass_rate={data['pass_rate']:.0%}" if data["pass_rate"] is not None else ""
+            print(f"  {phase:16s} tokens={data['total_tokens']:>8,}  "
+                  f"turns={data['turn_count']:>4}  "
+                  f"time={data['duration_ms']:>8.0f}ms  "
+                  f"calls={data['call_count']}{pr}")
+
+    if result.log_report:
+        workdir_slug = re.sub(r"[^a-zA-Z0-9]+", "-", os.path.basename(os.path.abspath(args.work_dir))).strip("-")
+        filename = f"{run_ts}_{config.mode}_{workdir_slug}.json"
+        output_dir = os.path.join(os.getcwd(), "output")
+        os.makedirs(output_dir, exist_ok=True)
+        log_path = os.path.join(output_dir, filename)
+        with open(log_path, "w") as f:
+            json.dump(result.log_report, f, indent=2)
+        print(f"\nLog written to: {log_path}")
+
     sys.exit(0 if result.success else 1)
 
 if __name__ == "__main__":

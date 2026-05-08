@@ -18,6 +18,9 @@ def fake_sdk_query(monkeypatch):
             result = MagicMock()
             result.type = "result"
             result.session_id = session_id
+            result.usage = MagicMock()
+            result.usage.input_tokens = 10
+            result.usage.output_tokens = 5
             yield result
 
         return _fake_query

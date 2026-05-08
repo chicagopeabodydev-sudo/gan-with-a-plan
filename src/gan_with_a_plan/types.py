@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass, field
-from typing import TypedDict
+from typing import Literal, TypedDict
 
 class CriterionFeedback(TypedDict):
     criterion: str
@@ -36,6 +36,25 @@ class HarnessConfig:
     # "implementation" = no-plan loop; "plan" = plan-gated loop
 
 @dataclass
+class CallMetrics:
+    input_tokens: int
+    output_tokens: int
+    turn_count: int
+    duration_ms: float
+
+@dataclass
+class IterationLog:
+    sprint_number: int
+    retry_number: int
+    component: Literal["planner", "generator", "evaluator"]
+    phase: Literal["planner", "contract", "plan", "implementation"] = "implementation"
+    input_tokens: int = 0
+    output_tokens: int = 0
+    turn_count: int = 0
+    duration_ms: float = 0.0
+    passed: bool | None = None
+
+@dataclass
 class SprintResult:
     sprint_number: int
     passed: bool
@@ -47,3 +66,4 @@ class HarnessResult:
     success: bool
     sprints: list[SprintResult] = field(default_factory=list)
     total_duration_ms: float = 0.0
+    log_report: dict = field(default_factory=dict)
