@@ -1,0 +1,260 @@
+{
+  "library_of_things": {
+    "description": "Wilmette Public Library's collection of technology, tools, and toys. The Library of Things offers nontraditional library materials for check-out to Wilmette library cardholders.",
+    "checkout_policy": "Library of Things items may be picked up at the circulation desk and checked out for a period of two weeks.",
+    "cardholders_only": true,
+    "catalog_url": "https://www.wilmettelibrary.info/libraryofthings",
+    "location": {
+      "name": "Wilmette Public Library",
+      "address": "1242 Wilmette Ave.",
+      "city": "Wilmette",
+      "state": "IL",
+      "zip": "60091",
+      "phone": "(847) 256-5025",
+      "google_maps_url": "http://maps.google.com/?q=1242%20Wilmette%20Ave.%2C%2BWilmette%20%2C%2BIL%2C%2B60091"
+    },
+    "hours": {
+      "monday": "9:00am-9:00pm",
+      "tuesday": "9:00am-9:00pm",
+      "wednesday": "9:00am-9:00pm",
+      "thursday": "9:00am-9:00pm",
+      "friday": "9:00am-9:00pm",
+      "saturday": "9:00am-5:00pm",
+      "sunday": "12:00pm-5:00pm"
+    },
+    "categories": [
+      "Accessibility",
+      "Chargers",
+      "Create",
+      "Digitization",
+      "Games",
+      "Media Players",
+      "STEM Kits",
+      "Tools",
+      "Travel"
+    ],
+    "audiences": [
+      "Adults",
+      "Kids",
+      "Teens"
+    ],
+    "items": [
+      {
+        "name": "4K HD Blu-ray Player",
+        "slug": "4k-hd-blu-ray-player",
+        "short_description": "Play 4K Ultra HD movies at home.",
+        "categories": ["Media Players"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=4888686",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/4k-hd-blu-ray-player",
+        "details": {
+          "full_description": "Play 4K Ultra HD movies at home with this 4K HD Blu-ray player. Must be used with 4K TV for full 4K UHD effect. Compatible with current HDR formats. This item comes with 1 remote control, 1 HDMI cable, 1 AC adapter, 1 user manual, and a carrying case."
+        }
+      },
+      {
+        "name": "7 Wonders (Board Game)",
+        "slug": "7-wonders-board-game",
+        "short_description": "Develop your city by increasing your scientific discoveries, military conquests, commercial agreements, and prestigious structures to lead your civilization to glory!",
+        "categories": ["Games"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=6108606",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/7-wonders-board-game",
+        "details": {
+          "full_description": "You are a leader of one of the seven greatest cities in Antiquity. Develop your city by increasing your scientific discoveries, military conquests, commercial agreements, and prestigious structures to lead your civilization to glory! All the while, keep an eye on your neighbors' progress since they share similar ambitions. Will your wonder transcend the millennia to come? A game of 7 Wonders plays over three rounds, called Ages, during which you will choose cards with increasingly powerful effects. Each card you choose will influence your general strategy. A board game for 3-7 players. Recommended for ages 10+."
+        }
+      },
+      {
+        "name": "7 Wonders Architects (Board Game)",
+        "slug": "7-wonders-architects-board-game",
+        "short_description": "Build one of the 7 wonders of the ancient world and gain as many victory points as possible to win the game!",
+        "categories": ["Games"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=6071873",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/7-wonders-architects-board-game",
+        "details": {
+          "full_description": "Build one of the 7 wonders of the ancient world and gain as many victory points as possible to win the game! The game plays over a series of turns. On your turn, choose one of the three available cards. These cards represent different characters who will help you gather resources to construct your wonder, make scientific discoveries, or even battle your neighbors. A board game for 2-7 players. Recommended for ages 8+."
+        }
+      },
+      {
+        "name": "Apple Pencil",
+        "slug": "apple-pencil",
+        "short_description": "Write or draw on your iPad.",
+        "categories": ["Create", "Tools"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=6432892",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/apple-pencil",
+        "details": {
+          "full_description": "Apple Pencil expands the power of iPad, iPad mini, and iPad Air and opens up new creative possibilities. It's sensitive to pressure and tilt, so you can easily vary line weight, create subtle shading, and produce a wide range of artistic effects--just like a conventional pencil, but with pixel-perfect precision. This item comes with an instruction manual and a plastic carrying case."
+        }
+      },
+      {
+        "name": "Assistive Devices Kit",
+        "slug": "assistive-devices-kit",
+        "short_description": "3D printed assistive devices that make everyday tasks easier.",
+        "categories": ["Accessibility", "Tools", "Travel"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=4785549",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/assistive-devices-kit",
+        "details": {
+          "full_description": "This kit contains seven 3D printed assistive devices that make everyday tasks easier. They are suitable for all ages. The items in this kit are: 1 bottle opener, 1 bag carrier, 1 key turner, 1 palm pen, 1 pen ball, 1 signature guard, 1 tube opener."
+        }
+      },
+      {
+        "name": "Azul (Board Game)",
+        "slug": "azul-board-game",
+        "short_description": "Azul invites you, a tile laying artist, to embellish the walls of the Royal Palace of Evora.",
+        "categories": ["Games"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=5046681",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/azul-board-game",
+        "details": {
+          "full_description": "Azul is a tile-placement game in which players compete for the highest score by claiming tiles and arranging them on their board to score points. Extra points are on offer for collecting sets of the same color of tile, or for creating particular patterns, while there are penalties for taking tiles that you're unable to use. But every tile that you claim affects what your rivals can take next. You'll have to make choices that help you without helping them too much! A board game for 2-4 players, recommended for ages 8+."
+        }
+      },
+      {
+        "name": "Bananagrams (Board Game)",
+        "slug": "bananagrams-board-game",
+        "short_description": "Race to arrange letters into a crossword and use up all of your tiles.",
+        "categories": ["Games"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=2&cn=6108473",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/bananagrams-board-game",
+        "details": {
+          "full_description": "A Scrabble-like game in which players form individual crossword puzzles with words that can change as players continue to draw tiles throughout the game. When there are no more tiles to draw, the first player to use all their letters wins. A board game for 2-8 players. Recommended for ages 7+."
+        }
+      },
+      {
+        "name": "Bee-Bot",
+        "slug": "bee-bot",
+        "short_description": "Programmable floor robot.",
+        "categories": ["STEM Kits"],
+        "audiences": ["Kids"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=989130",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/bee-bot",
+        "details": {
+          "full_description": "Programmable floor robot."
+        }
+      },
+      {
+        "name": "Bird Watching Kit",
+        "slug": "bird-watching-kit",
+        "short_description": "Binoculars and bird identification guidebook.",
+        "categories": ["STEM Kits"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=1870633",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/bird-watching-kit",
+        "details": {
+          "full_description": "Binoculars and bird identification guidebook."
+        }
+      },
+      {
+        "name": "Blu-ray Player - Proscan Brand",
+        "slug": "blu-ray-player",
+        "short_description": "Enjoy your favorite content on Blu-ray discs, DVDs, CDs, or even USB devices.",
+        "categories": ["Media Players", "Travel"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=4188411",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/blu-ray-player",
+        "details": {
+          "full_description": "Enjoy your favorite content on Blu-ray discs, DVDs, CDs, or even USB devices. This Blu-ray player has a 11.6\" screen. This item includes 1 remote, 1 AC adapter, 1 car adapter, 1 user manual, and a carrying case."
+        }
+      },
+      {
+        "name": "Blu-ray Player - Fangor Brand",
+        "slug": "blu-ray-player-fangor-brand",
+        "short_description": "Enjoy your favorite content on Blu-ray discs, DVDs, CDs, or even USB devices.",
+        "categories": ["Media Players", "Travel"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=7&cn=6106703",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/blu-ray-player-fangor-brand",
+        "details": {
+          "full_description": "Enjoy your favorite content on Blu-ray discs, DVDs, CDs, or even USB devices. This Blu-ray player has a 13.3\" screen. This item includes 1 remote, 1 AC adapter, 1 car adapter, 1 user manual, and a carrying case."
+        }
+      },
+      {
+        "name": "Calico (Board Game)",
+        "slug": "calico-board-game",
+        "short_description": "Compete to sew the coziest quilt as you collect and place patches of different colors and patterns.",
+        "categories": ["Games"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=3&cn=6108591",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/calico-board-game",
+        "details": {
+          "full_description": "In Calico, players compete to sew the coziest quilt as they collect and place patches of different colors and patterns. Players will choose a personal design to follow, while trying to create color and pattern combinations that are not only aesthetically pleasing, but also able to attract the cuddliest cats! A board game for 1-4 players. Recommended for ages 10+."
+        }
+      },
+      {
+        "name": "Carcassonne (Board Game)",
+        "slug": "carcassonne-board-game",
+        "short_description": "Players score points as they develop the land around the medieval city of Carcassonne.",
+        "categories": ["Games"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=5055849",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/carcassonne-board-game",
+        "details": {
+          "full_description": "Inspired by the medieval fortress in southern France of the same name, Carcassonne is a tile-laying game in which players fill in the countryside around the fortified city. Players place land tiles to develop roads, cities, fields, and cloisters, and deploy their followers as thieves, farmers, knights and monks to score points as they develop the land around the medieval city of Carcassonne. A board game for 2-5 players. Recommended for ages 7+."
+        }
+      },
+      {
+        "name": "Catan (Board Game)",
+        "slug": "catan-board-game",
+        "short_description": "Play Settlers of Catan.",
+        "categories": ["Games"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=5046668",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/catan-board-game",
+        "details": {
+          "full_description": "Picture yourself in the era of discoveries: after a long voyage of great deprivation, your ships have finally reached the coast of an uncharted island. Its name shall be Catan! But you are not the only discoverer. Other fearless seafarers have also landed on the shores of Catan - the race to settle the island has begun! A board game for 3-4 players. Recommended for ages 10+."
+        }
+      },
+      {
+        "name": "CD Player",
+        "slug": "cd-player",
+        "short_description": "Listen to CDs on the go.",
+        "categories": ["Media Players", "Travel"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=4121662",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/cd-player",
+        "details": {
+          "full_description": "Listen to CDs on the go with this portable CD player. This item includes 1 USB to micro USB charging cable, 1 3.5mm to 3.5mm AUX cable, 1 user guide, and a carrying case."
+        }
+      },
+      {
+        "name": "Codenames (Board Game)",
+        "slug": "codenames",
+        "short_description": "Two rival spymasters and their teammates compete to make contact with secret agents in the field.",
+        "categories": ["Games"],
+        "audiences": ["Adults", "Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=3&cn=5046512",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/codenames",
+        "details": {
+          "full_description": "Two rival spymasters know the secret identities of 25 agents. Their teammates know the agents only by their codenames. To win the game, your team will need to contact all of your agents in the field before the other team finds their own agents. And watch out for the assassin - meet him in the field and your team is done! A board game for 2-8+ players. Recommended for ages 10+."
+        }
+      },
+      {
+        "name": "Color Blind Glasses for Adults, Outdoor",
+        "slug": "color-blind-glasses-adults-outdoor",
+        "short_description": "Eyeglasses that deliver vibrant color for most types of color blindness.",
+        "categories": ["Accessibility", "Tools"],
+        "audiences": ["Adults"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=1&cn=4130753",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/color-blind-glasses-adults-outdoor",
+        "details": {
+          "full_description": "Enchroma Altavista wrap-around eyeglasses that deliver vibrant color for those with most types of color blindness, designed to be worn over prescription glasses. This item includes 1 cleaning cloth and a hardshell case."
+        }
+      },
+      {
+        "name": "Color Blind Glasses for Kids",
+        "slug": "color-blind-glasses-kids",
+        "short_description": "Glasses that deliver clear, vibrant color for ages 8+ with Deutan types of red-green color blindness.",
+        "categories": ["Accessibility", "Tools"],
+        "audiences": ["Kids", "Teens"],
+        "checkout_url": "https://ccs.polarislibrary.com/polaris/search/title.aspx?ctx=55.1033.0.0.53&pos=3&cn=4130782",
+        "details_url": "https://www.wilmettelibrary.info/library-of-things/color-blind-glasses-kids",
+        "details": {
+          "full_description": "Enchroma Skypark glasses that deliver clear, vibrant color for ages 8+ with Deutan types of red-green color blindness. This item includes 1 cleaning cloth and a hardshell case."
+        }
+      }
+    ]
+  }
+}

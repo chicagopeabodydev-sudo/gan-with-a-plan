@@ -21,8 +21,17 @@
 	- Text area to receive input from the user (users do not have to enter input into this if they choose one of the suggested prompts)
 	- Button to "Submit" user input
 - Second Pane
-	- Content is driven by the type of information to display which could include text, links, images, or videos/animation
-	- Close button to dismiss the pane and return to viewing just one
+	- "First Details Level" - used when the response includes lists of items (not just a simple answer)
+	- Content is most likely a list of items (note: each item may have additional details, and if so then a link or button is added to see the details for each item)
+	- Close button to dismiss the pane and return to viewing just the Chat Interface
 - Third Pane
-	- Similar to the second pane it has content that is driven by the type of information to display which could include text, links, images, or videos/animation
+	- "Second Details Level" - used when the response in the Second Pane has a link for even further details about the items; when the link is clicked for a specific item in the First Details Pane, then this is where this additional information is placed 
+	- Content that is driven by the type of information to display which could include text, links, images, or videos/animation
 	- Close button to dismiss the third pane and return to viewing two panes
+
+## Sample Data
+There is sample data that is typical of the content the three-panel chat will be used for. The JSON file has three levels of data: top level data that only uses the Chat Interface, an array of "items" that would be appropriate for the Second Pane, and details about each item that would be appropriate for the Third Pane.
+[Sample Data](./sample_data/library_of_things.json)
+
+## Chat Interface Functionality
+The Chat Interface pane should have basic funtionality to understand a question that can be answered by the sample data. It does NOT need to be a production-level chat system. It is for simple testing only, and it should be kept as minimal as possible.
