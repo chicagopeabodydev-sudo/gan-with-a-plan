@@ -1,6 +1,7 @@
 import os, time
-from claude_code_sdk import query, ClaudeCodeOptions
+from claude_code_sdk import ClaudeCodeOptions, AssistantMessage, ResultMessage, TextBlock
 from .types import HarnessConfig, HarnessResult, SprintResult, SprintContract, IterationLog
+from .sdk_utils import safe_query
 from .logger import Logger
 from .planner import run_planner
 from .generator import run_generator, run_generator_plan_only
@@ -11,7 +12,8 @@ async def _generator_propose_contract(config: HarnessConfig, sprint_num: int) ->
     import time as _time
     from .types import CallMetrics
     spec_path = os.path.join(config.work_dir, "spec.md")
-    prompt = f"Read {spec_path} and propose a SprintContract JSON for sprint {sprint_num}. Output only the JSON object."
+    schema = '{"sprintNumber": <int>, "features": ["<feature>", ...], "criteria": [{"name": "<str>", "description": "<str>", "threshold": <float 0-10>}, ...]}'
+    prompt = f"Read {spec_path} and propose a SprintContract JSON for sprint {sprint_num}. Use EXACTLY this schema (camelCase keys): {schema}. Output only the JSON object."
     options = ClaudeCodeOptions(
         cwd=config.work_dir,
         system_prompt="You are a sprint planner. Produce a single SprintContract JSON object and nothing else.",
@@ -24,19 +26,29 @@ async def _generator_propose_contract(config: HarnessConfig, sprint_num: int) ->
     turn_count = 0
     input_tokens = output_tokens = 0
     t0 = _time.monotonic()
-    async for message in query(prompt=prompt, options=options):
-        if message.type == "assistant":
+    async for message in safe_query(prompt=prompt, options=options):
+        if isinstance(message, AssistantMessage):
             turn_count += 1
-            for block in message.message.content:
-                if block.type == "text":
+            for block in message.content:
+                if isinstance(block, TextBlock):
                     raw += block.text
-        elif message.type == "result":
+        elif isinstance(message, ResultMessage):
+            if not raw and message.result:
+                raw = message.result
             u = getattr(message, "usage", None)
             if u:
-                input_tokens = getattr(u, "input_tokens", 0)
-                output_tokens = getattr(u, "output_tokens", 0)
+                if isinstance(u, dict):
+                    input_tokens = u.get("input_tokens", 0)
+                    output_tokens = u.get("output_tokens", 0)
+                else:
+                    input_tokens = getattr(u, "input_tokens", 0)
+                    output_tokens = getattr(u, "output_tokens", 0)
             break
     duration_ms = (_time.monotonic() - t0) * 1000
+    import sys as _sys
+    print(f"[contract-propose raw]: {raw[:200]!r}", file=_sys.stderr)
+    if not raw.strip():
+        raise RuntimeError("Generator returned empty contract proposal")
     metrics = CallMetrics(input_tokens, output_tokens, turn_count, duration_ms)
     return _extract_json(raw), metrics
 

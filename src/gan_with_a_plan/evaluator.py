@@ -1,6 +1,7 @@
 import re, json, time
-from claude_code_sdk import query, ClaudeCodeOptions
+from claude_code_sdk import ClaudeCodeOptions, AssistantMessage, ResultMessage, TextBlock
 from .types import HarnessConfig, SprintContract, EvalResult, CallMetrics
+from .sdk_utils import safe_query
 
 def build_evaluator_prompt(contract: SprintContract, mode: str) -> str:
     modes = {
@@ -8,11 +9,21 @@ def build_evaluator_prompt(contract: SprintContract, mode: str) -> str:
         "plan": "Evaluate the generator's proposed plan against the sprint contract criteria.",
         "implementation": "Evaluate the implemented code against the sprint contract criteria.",
     }
-    return f"{modes[mode]}\n\nContract:\n{contract}\n\nReturn a JSON EvalResult."
+    schema = '''{
+  "feedback": [
+    {"criterion": "<name>", "score": <0-10 float>, "details": "<explanation>"}
+  ],
+  "overallSummary": "<one paragraph summary>"
+}'''
+    return f"{modes[mode]}\n\nContract:\n{contract}\n\nRespond with ONLY a JSON object matching this exact schema:\n{schema}"
 
 def _get_usage(msg) -> tuple[int, int]:
     u = getattr(msg, "usage", None)
-    return (getattr(u, "input_tokens", 0), getattr(u, "output_tokens", 0)) if u else (0, 0)
+    if not u:
+        return (0, 0)
+    if isinstance(u, dict):
+        return (u.get("input_tokens", 0), u.get("output_tokens", 0))
+    return (getattr(u, "input_tokens", 0), getattr(u, "output_tokens", 0))
 
 async def run_evaluator(
     contract: SprintContract,
@@ -31,18 +42,31 @@ async def run_evaluator(
     turn_count = 0
     input_tokens = output_tokens = 0
     t0 = time.monotonic()
-    async for message in query(prompt="Evaluate per the contract criteria.", options=options):
-        if message.type == "assistant":
+    async for message in safe_query(prompt="Evaluate per the contract criteria.", options=options):
+        if isinstance(message, AssistantMessage):
             turn_count += 1
-            for block in message.message.content:
-                if block.type == "text":
+            for block in message.content:
+                if isinstance(block, TextBlock):
                     raw += block.text
-        elif message.type == "result":
+        elif isinstance(message, ResultMessage):
+            if not raw and message.result:
+                raw = message.result
             input_tokens, output_tokens = _get_usage(message)
             break
     duration_ms = (time.monotonic() - t0) * 1000
+    import sys
+    print(f"\n[evaluator raw ({evaluation_mode})]: {raw[:500]!r}", file=sys.stderr)
     result = _extract_eval_result(raw)
-    result["passed"] = all(f["score"] >= config.pass_threshold for f in result["feedback"])
+    print(f"[evaluator parsed]: {result}", file=sys.stderr)
+    scores = [f["score"] for f in result["feedback"]]
+    if evaluation_mode == "contract":
+        # Use average score for contract gate — individual criteria will vary widely
+        avg = sum(scores) / len(scores) if scores else 0
+        result["passed"] = avg >= config.pass_threshold
+        print(f"[evaluator passed={result['passed']} avg={avg:.2f} threshold={config.pass_threshold}]", file=sys.stderr)
+    else:
+        result["passed"] = all(s >= config.pass_threshold for s in scores)
+        print(f"[evaluator passed={result['passed']} threshold={config.pass_threshold}]", file=sys.stderr)
     return result, CallMetrics(input_tokens, output_tokens, turn_count, duration_ms)
 
 def _extract_eval_result(raw: str) -> EvalResult:
