@@ -8,8 +8,8 @@
 
 ## Pane Resizing Rules
 
-1. If only one pane is being displayed (meaning, only the chat interface) then this is positioned flush left and covers 65% of the screen.
-2. If two panes are displayed, then the chat pane is resized to cover 50% of the screen and the details pane covers the other 50%.
+1. If only one pane is being displayed (meaning, only the chat interface) then this is displayed at full width.
+2. If two panes are displayed, then the screen is split into two equal columns: the chat pane on the left and the second pane on the right.
 3. If all three are opened, then the chat pane and second pane are positioned one on top of the other in the left-side 50% of the screen, and the third pane is opened in the right 50% of the screen.
 
 ## UI Components
