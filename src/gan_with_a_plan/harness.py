@@ -1,4 +1,4 @@
-import os, time
+import asyncio, os, time
 from claude_code_sdk import ClaudeCodeOptions, AssistantMessage, ResultMessage, TextBlock
 from .types import HarnessConfig, HarnessResult, SprintResult, SprintContract, IterationLog
 from .sdk_utils import safe_query
@@ -135,12 +135,29 @@ async def run_harness(config: HarnessConfig) -> HarnessResult:
     for sprint_num in range(1, config.max_sprints + 1):
         contract = await _negotiate_contract(config, sprint_num, logger)
 
+        approved_plan_text = None
         if config.mode == "plan":
             await _run_plan_approval_loop(contract, config, sprint_num, logger)
+            plan_path = os.path.join(config.work_dir, "plan.md")
+            with open(plan_path) as f:
+                approved_plan_text = f.read()
+
+            if config.human_review:
+                print(f"\n{'='*60}")
+                print("PLAN APPROVED BY EVALUATOR — HUMAN REVIEW REQUIRED")
+                print(f"{'='*60}")
+                print(approved_plan_text)
+                print(f"{'='*60}")
+                response = await asyncio.to_thread(
+                    input, "Proceed with implementation? [ENTER to approve / 'abort' to halt]: "
+                )
+                if response.strip().lower() in ("abort", "n", "no"):
+                    sprint_results.append(SprintResult(sprint_num, False, 0, None))
+                    break
 
         session_id, previous_feedback = None, None
         for retry in range(config.max_retries_per_sprint):
-            _, session_id, gen_metrics = await run_generator(contract, config, previous_feedback, session_id)
+            _, session_id, gen_metrics = await run_generator(contract, config, previous_feedback, session_id, plan_text=approved_plan_text)
             logger.record(IterationLog(
                 sprint_number=sprint_num, retry_number=retry, component="generator",
                 phase="implementation",

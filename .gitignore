@@ -217,5 +217,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# GAN harness run logs
+# GAN harness run artifacts
 output/
+workspace/
+/spec.md

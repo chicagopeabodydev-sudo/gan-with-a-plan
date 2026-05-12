@@ -34,6 +34,7 @@ class HarnessConfig:
     evaluator_model: str = field(default_factory=lambda: os.environ.get("EVALUATOR_MODEL", "claude-opus-4-7"))
     mode: str = field(default_factory=lambda: os.environ.get("GAN_MODE", "implementation"))
     # "implementation" = no-plan loop; "plan" = plan-gated loop
+    human_review: bool = field(default_factory=lambda: os.environ.get("HUMAN_REVIEW", "").lower() in ("1", "true", "yes"))
 
 @dataclass
 class CallMetrics:

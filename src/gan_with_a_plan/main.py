@@ -22,6 +22,8 @@ def main():
         default=os.environ.get("GENERATOR_MODEL", "claude-sonnet-4-6"))
     parser.add_argument("--evaluator-model",
         default=os.environ.get("EVALUATOR_MODEL", "claude-opus-4-7"))
+    parser.add_argument("--human-review", action="store_true", default=False,
+        help="In plan mode, pause for human approval before implementation begins")
     args = parser.parse_args()
 
     if not args.prompt and not args.file:
@@ -37,6 +39,7 @@ def main():
         generator_model=args.generator_model,
         evaluator_model=args.evaluator_model,
         mode=args.mode,
+        human_review=args.human_review,
     )
     run_ts = datetime.now().strftime("%Y-%m-%d_%H%M%S")
     result = asyncio.run(run_harness(config))

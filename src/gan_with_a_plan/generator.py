@@ -3,11 +3,15 @@ from claude_code_sdk import ClaudeCodeOptions, AssistantMessage, ResultMessage, 
 from .types import HarnessConfig, SprintContract, EvalResult, CallMetrics
 from .sdk_utils import safe_query
 
-def build_generator_prompt(contract: SprintContract, feedback: EvalResult | None) -> str:
+def build_generator_prompt(contract: SprintContract, feedback: EvalResult | None, work_dir: str = "", plan_text: str | None = None) -> str:
     sprint_num = contract.get("sprintNumber") or contract.get("sprint_number", "?")
     base = f"Sprint {sprint_num} contract:\n{contract}"
+    if plan_text:
+        base += f"\n\nAn implementation plan has been approved by the evaluator. Follow it:\n\n{plan_text}"
     if feedback:
         base += f"\n\nPrevious evaluation feedback:\n{feedback['overallSummary']}"
+    if work_dir:
+        base += f"\n\nIMPORTANT: All files you create or edit MUST be written inside {work_dir}/. Never write files outside this directory."
     return base
 
 def _get_usage(msg) -> tuple[int, int]:
@@ -23,10 +27,11 @@ async def run_generator(
     config: HarnessConfig,
     previous_feedback: EvalResult | None = None,
     session_id: str | None = None,
+    plan_text: str | None = None,
 ) -> tuple[str, str | None, CallMetrics]:
     options = ClaudeCodeOptions(
         cwd=config.work_dir,
-        system_prompt=build_generator_prompt(contract, previous_feedback),
+        system_prompt=build_generator_prompt(contract, previous_feedback, config.work_dir, plan_text),
         permission_mode="bypassPermissions",
         allowed_tools=["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
         model=config.generator_model,
@@ -60,7 +65,7 @@ async def run_generator_plan_only(
     """Plan-gated variant: proposes an approach without writing any code."""
     options = ClaudeCodeOptions(
         cwd=config.work_dir,
-        system_prompt=build_generator_prompt(contract, previous_plan_feedback),
+        system_prompt=build_generator_prompt(contract, previous_plan_feedback, config.work_dir),
         permission_mode="bypassPermissions",
         allowed_tools=["Read", "Glob", "Grep"],
         model=config.generator_model,
